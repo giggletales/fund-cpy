@@ -1124,6 +1124,7 @@ function AnalyticsSection({ user }: { user: any }) {
                 </div>
               </div>
             </div>
+          </div>
           )}
         </>
       ) : (
@@ -1135,15 +1136,15 @@ function AnalyticsSection({ user }: { user: any }) {
                 <li>• MT5 account credentials have been assigned by admin</li>
                 <li>• Your account is active and properly configured</li>
                 <li>• You have a stable internet connection</li>
-              </ul>
-              <button
-                onClick={() => fetchRealTimeData()}
-                className="mt-6 px-6 py-3 bg-gradient-to-r from-electric-blue to-neon-purple rounded-lg font-semibold hover:scale-105 transition-transform"
-              >
-                Retry Connection
-              </button>
-            </div>
-          )}
+            </ul>
+            <button
+              onClick={() => fetchRealTimeData()}
+              className="mt-6 px-6 py-3 bg-gradient-to-r from-electric-blue to-neon-purple rounded-lg font-semibold hover:scale-105 transition-transform"
+            >
+              Retry Connection
+            </button>
+          </div>
+        )}
         </>
       )}
       </div>
