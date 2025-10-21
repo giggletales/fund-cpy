@@ -14,7 +14,7 @@ export async function getCurrentUser() {
   };
 }
 
-export async function signUp(email: string, password: string, firstName: string, lastName: string) {
+export async function signUp(email: string, password: string, firstName: string, lastName: string, country?: string) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -28,6 +28,24 @@ export async function signUp(email: string, password: string, firstName: string,
 
   if (error || !data.user) {
     return { success: false, error: error?.message || 'Signup failed' };
+  }
+
+  // Create user profile with friendly ID
+  try {
+    const { error: profileError } = await supabase
+      .from('user_profiles')
+      .insert({
+        user_id: data.user.id,
+        first_name: firstName,
+        last_name: lastName,
+        country: country || ''
+      });
+
+    if (profileError) {
+      console.error('Failed to create user profile:', profileError);
+    }
+  } catch (profileError) {
+    console.error('Error creating user profile:', profileError);
   }
 
   // Send welcome email (don't block signup if email fails)

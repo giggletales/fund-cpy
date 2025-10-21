@@ -1029,11 +1029,11 @@ function AnalyticsSection({ user }: { user: any }) {
                           </div>
                           <div className="text-xs px-3 py-1 bg-white/10 rounded-full">Active</div>
                         </div>
-                  <div className="text-sm text-white/60 mb-2 group-hover:text-white/80 transition-colors">Open Positions</div>
-                  <div className="text-3xl font-bold mb-2">{realTimeData.openTrades}</div>
-                  <div className="text-xs text-white/50">Active Trades</div>
-                </div>
-              </div>
+                        <div className="text-sm text-white/60 mb-2 group-hover:text-white/80 transition-colors">Open Positions</div>
+                        <div className="text-3xl font-bold mb-2">{realTimeData.openTrades}</div>
+                        <div className="text-xs text-white/50">Active Trades</div>
+                      </div>
+                    </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
@@ -1123,10 +1123,12 @@ function AnalyticsSection({ user }: { user: any }) {
                   </div>
                 </div>
               </div>
-            </>
-          ) : (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-8 text-center backdrop-blur-sm">
-              <Activity size={64} className="mx-auto mb-4 text-red-500" />
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-8 text-center backdrop-blur-sm">
+          <Activity size={64} className="mx-auto mb-4 text-red-500" />
               <h3 className="text-2xl font-bold mb-2">Unable to Load Real-Time Data</h3>
               <p className="text-white/70 mb-4">Failed to fetch MT5 data. Please ensure:</p>
               <ul className="text-left max-w-md mx-auto text-white/60 space-y-2">

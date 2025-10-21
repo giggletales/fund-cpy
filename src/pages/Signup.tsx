@@ -5,7 +5,7 @@ import { signUp, getCurrentUser } from '../lib/auth';
 export default function Signup() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { returnTo, accountSize, challengeType, originalPrice } = location.state || {};
+  const { returnTo, accountSize, challengeType, originalPrice, isPayAsYouGo, phase2Price } = location.state || {};
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -35,7 +35,9 @@ export default function Signup() {
         state: {
           accountSize: accountSize,
           challengeType: challengeType,
-          originalPrice: originalPrice
+          originalPrice: originalPrice,
+          isPayAsYouGo: isPayAsYouGo,
+          phase2Price: phase2Price
         }
       });
     }
@@ -52,7 +54,8 @@ export default function Signup() {
       formData.email,
       formData.password,
       formData.firstName,
-      formData.lastName
+      formData.lastName,
+      formData.country
     );
 
     console.log('Signup result:', result);
@@ -64,7 +67,7 @@ export default function Signup() {
         console.log('Navigating to payment page');
 
         // Use query parameters for more reliable data transfer
-        const paymentUrl = `/payment?accountSize=${accountSize}&challengeType=${encodeURIComponent(challengeType)}&originalPrice=${originalPrice}`;
+        const paymentUrl = `/payment?accountSize=${accountSize}&challengeType=${encodeURIComponent(challengeType)}&originalPrice=${originalPrice}${isPayAsYouGo ? `&isPayAsYouGo=true&phase2Price=${phase2Price}` : ''}`;
         console.log('Payment URL:', paymentUrl);
 
         window.location.href = paymentUrl;

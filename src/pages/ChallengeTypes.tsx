@@ -116,7 +116,9 @@ export default function ChallengeTypes() {
       returnTo: '/payment',
       accountSize: tier.account_size,
       challengeType: selectedChallenge?.challenge_code,
-      originalPrice: tier.discount_price
+      originalPrice: selectedChallenge?.challenge_code === 'PAYG_2STEP' ? tier.phase_1_price : tier.regular_price,
+      isPayAsYouGo: selectedChallenge?.challenge_code === 'PAYG_2STEP',
+      phase2Price: tier.phase_2_price
     };
 
     console.log('ChallengeTypes navigating to signup with state:', navState);
@@ -183,8 +185,8 @@ export default function ChallengeTypes() {
       </div>
 
       {selectedChallenge && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 overflow-y-auto">
-          <div className="glass-card max-w-6xl w-full my-8 relative z-[10000]">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40 flex items-center justify-center p-4 overflow-y-auto pt-24">
+          <div className="glass-card max-w-6xl w-full my-8 relative">
             <button
               onClick={() => setSelectedChallenge(null)}
               className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all z-10"
@@ -230,23 +232,14 @@ export default function ChallengeTypes() {
                         {selectedChallenge.challenge_code === 'PAYG_2STEP' ? (
                           <div className="space-y-1">
                             <div className="text-sm text-gray-400">Phase 1</div>
-                            <div className="text-2xl font-bold text-green-400">
-                              ${(tier.phase_1_price! / 2).toFixed(0)}
-                            </div>
-                            <div className="text-xs text-gray-500 line-through">
+                            <div className="text-2xl font-bold">
                               ${tier.phase_1_price}
                             </div>
                           </div>
                         ) : (
                           <div>
-                            <div className="text-3xl font-bold text-neon-green mb-1">
-                              ${tier.discount_price}
-                            </div>
-                            <div className="text-sm text-gray-500 line-through">
+                            <div className="text-3xl font-bold mb-1">
                               ${tier.regular_price}
-                            </div>
-                            <div className="text-xs text-green-400 font-bold">
-                              50% OFF
                             </div>
                           </div>
                         )}
@@ -321,7 +314,7 @@ export default function ChallengeTypes() {
                     className="w-full mt-6 py-4 btn-gradient text-xl font-bold flex items-center justify-center space-x-3 group"
                   >
                     <DollarSign size={24} />
-                    <span>Purchase Challenge - ${selectedTier.discount_price}</span>
+                    <span>Purchase Challenge - ${selectedChallenge?.challenge_code === 'PAYG_2STEP' ? selectedTier.phase_1_price : selectedTier.regular_price}</span>
                     <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>

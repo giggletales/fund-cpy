@@ -26,6 +26,8 @@ export default function CryptoPayment() {
   const originalPrice = location.state?.originalPrice !== undefined
     ? location.state.originalPrice
     : Number(urlParams.get('originalPrice'));
+  const isPayAsYouGo = location.state?.isPayAsYouGo || urlParams.get('isPayAsYouGo') === 'true';
+  const phase2Price = location.state?.phase2Price || Number(urlParams.get('phase2Price'));
 
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -100,9 +102,11 @@ export default function CryptoPayment() {
     }
   };
 
-  const finalPrice = appliedCoupon
+  const discountedPrice = appliedCoupon
     ? originalPrice * (1 - appliedCoupon.discount_percent / 100)
     : originalPrice;
+
+  const finalPrice = discountedPrice;
 
   const cryptoAmount = selectedCrypto === 'ETH'
     ? (finalPrice / cryptoPrices.ETH).toFixed(6)
@@ -182,7 +186,10 @@ export default function CryptoPayment() {
               amount_paid: finalPrice,
               payment_id: payment?.id,
               discount_applied: appliedCoupon ? true : false,
-              status: 'pending_credentials'
+              status: 'pending_credentials',
+              current_phase: isPayAsYouGo ? 1 : null,
+              phase_2_paid: false,
+              phase_2_price: isPayAsYouGo ? phase2Price : null
             })
             .select()
             .maybeSingle();
@@ -401,16 +408,21 @@ export default function CryptoPayment() {
             </div>
             <div className="text-center">
               <p className="text-sm text-gray-400 mb-1">Total Amount</p>
-              {appliedCoupon && (
-                <p className="text-sm text-gray-400 line-through">${originalPrice}</p>
-              )}
-              <p className="text-2xl font-bold">
-                <GradientText>${finalPrice}</GradientText>
-              </p>
-              {appliedCoupon && (
-                <p className="text-xs text-neon-green mt-1">
-                  {appliedCoupon.discount_percent}% OFF Applied!
+              {!appliedCoupon && (
+                <p className="text-2xl font-bold">
+                  <GradientText>${originalPrice}</GradientText>
                 </p>
+              )}
+              {appliedCoupon && (
+                <>
+                  <p className="text-sm text-gray-400 line-through">${originalPrice}</p>
+                  <p className="text-2xl font-bold">
+                    <GradientText>${finalPrice}</GradientText>
+                  </p>
+                  <p className="text-xs text-neon-green mt-1">
+                    {appliedCoupon.discount_percent}% OFF Applied!
+                  </p>
+                </>
               )}
             </div>
           </div>
